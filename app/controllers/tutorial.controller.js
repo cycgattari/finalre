@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.title) {
+  if (!req.body.murosector) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -14,9 +14,16 @@ exports.create = (req, res) => {
 
   // Create a Tutorial
   const tutorial = {
-    title: req.body.title,
-    description: req.body.description,
-    published: req.body.published ? req.body.published : false
+    escalador: req.body.escalador,
+    mail: req.body.mail,
+    encadenada: req.body.encadenada,
+    avista: req.body.avista,
+    fecha: req.body.fecha,
+    grado: req.body.grado,
+    murosector: req.body.murosector,
+    nombre: req.body.nombre,
+    realizada: req.body.realizada,
+    artificial: req.body.artificial,
   };
 
   // Save Tutorial in the database
@@ -34,8 +41,8 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-  const title = req.query.title;
-  var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+  const murosector = req.query.murosector;
+  var condition = murosector ? { murosector: { [Op.like]: `%${murosector}%` } } : null;
 
   Tutorial.findAll({ where: condition })
     .then(data => {
@@ -55,13 +62,7 @@ exports.findOne = (req, res) => {
 
   Tutorial.findByPk(id)
     .then(data => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find Tutorial with id=${id}.`
-        });
-      }
+      res.send(data);
     })
     .catch(err => {
       res.status(500).send({
@@ -138,8 +139,9 @@ exports.deleteAll = (req, res) => {
 };
 
 // find all published Tutorial
-exports.findAllPublished = (req, res) => {
-  Tutorial.findAll({ where: { published: true } })
+exports.findAllEscalador = (req, res) => {
+  const escalador = req.params.escalador;
+  Tutorial.findAll({ where: {escalador : escalador} })
     .then(data => {
       res.send(data);
     })
@@ -150,3 +152,6 @@ exports.findAllPublished = (req, res) => {
       });
     });
 };
+
+
+
